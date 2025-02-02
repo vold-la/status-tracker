@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: status-page-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --worker-class eventlet --workers 1 --bind 0.0.0.0:$PORT "app:create_app()"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.8.0
+      - key: DATABASE_URL  
+        fromDatabase:
+          name: status_page_0rhp
+          property: connectionString
+      - key: FLASK_ENV
+        value: production
+
+databases:
+  - name: status_page_0rhp
+    plan: free
